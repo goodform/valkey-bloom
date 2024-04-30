@@ -1,5 +1,5 @@
-#ifndef REBLOOM_H
-#define REBLOOM_H
+#ifndef VALKEYBLOOM_H
+#define VALKEYBLOOM_H
 
 #include "contrib/bloom.h"
 #include <stdlib.h>
@@ -83,7 +83,7 @@ const char *SBChain_GetEncodedChunk(const SBChain *sb, long long *curIter, size_
 /**
  * Creates a new chain from the encoded parameters returned by SBChain_GetEncodedHeader.
  * This function will return NULL if the header is corrupt or in a format not understood
- * by this version of rebloom. In this case, the description is found in the
+ * by this version of valkeybloom. In this case, the description is found in the
  * errmsg pointer.
  */
 SBChain *SB_NewChainFromHeader(const char *buf, size_t bufLen, const char **errmsg);

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from rmtest import ModuleTestCase
+from vkmtest import ModuleTestCase
 from redis import ResponseError
 import sys
 
@@ -7,7 +7,7 @@ if sys.version >= '3':
     xrange = range
 
 
-class RebloomTestCase(ModuleTestCase('../rebloom.so')):
+class RebloomTestCase(ModuleTestCase('../valkeybloom.so')):
     def test_custom_filter(self):
         # Can we create a client?
         c = self.client

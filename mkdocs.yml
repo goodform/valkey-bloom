@@ -1,5 +1,5 @@
-site_name: ReBloom Documentation
-repo_url: https://github.com/goodform/rebloom
+site_name: ValkeyBloom Documentation
+repo_url: https://github.com/valkey/ValkeyBloom
 theme: material
 
 google_analytics:
@@ -10,7 +10,7 @@ markdown_extensions:
   - toc(permalink=true)
  
 pages:
-    - 'ReBloom': 'index.md'
+    - 'ValkeyBloom': 'index.md'
     - 'Quick Start': 'Quick_Start.md'
     - 'Bloom Commands': 'Bloom_Commands.md'
     - 'Cuckoo Filter Commands': 'Cuckoo_Commands.md'

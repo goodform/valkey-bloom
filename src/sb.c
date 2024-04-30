@@ -1,7 +1,7 @@
 #include "sb.h"
-#include "redismodule.h"
-#define BLOOM_CALLOC RedisModule_Calloc
-#define BLOOM_FREE RedisModule_Free
+#include "valkeymodule.h"
+#define BLOOM_CALLOC ValkeyModule_Calloc
+#define BLOOM_FREE ValkeyModule_Free
 #include "contrib/bloom.c"
 #include <string.h>
 
@@ -15,10 +15,10 @@
 
 static int SBChain_AddLink(SBChain *chain, size_t size, double error_rate) {
     if (!chain->filters) {
-        chain->filters = RedisModule_Calloc(1, sizeof(*chain->filters));
+        chain->filters = ValkeyModule_Calloc(1, sizeof(*chain->filters));
     } else {
         chain->filters =
-            RedisModule_Realloc(chain->filters, sizeof(*chain->filters) * (chain->nfilters + 1));
+            ValkeyModule_Realloc(chain->filters, sizeof(*chain->filters) * (chain->nfilters + 1));
     }
 
     SBLink *newlink = chain->filters + chain->nfilters;
@@ -31,8 +31,8 @@ void SBChain_Free(SBChain *sb) {
     for (size_t ii = 0; ii < sb->nfilters; ++ii) {
         bloom_free(&sb->filters[ii].inner);
     }
-    RedisModule_Free(sb->filters);
-    RedisModule_Free(sb);
+    ValkeyModule_Free(sb->filters);
+    ValkeyModule_Free(sb);
 }
 
 static int SBChain_AddToLink(SBLink *lb, bloom_hashval hash) {
@@ -93,7 +93,7 @@ SBChain *SB_NewChain(size_t initsize, double error_rate, unsigned options) {
     if (initsize == 0 || error_rate == 0) {
         return NULL;
     }
-    SBChain *sb = RedisModule_Calloc(1, sizeof(*sb));
+    SBChain *sb = ValkeyModule_Calloc(1, sizeof(*sb));
     sb->options = options;
     if (SBChain_AddLink(sb, initsize, error_rate) != 0) {
         SBChain_Free(sb);
@@ -211,8 +211,8 @@ SBChain *SB_NewChainFromHeader(const char *buf, size_t bufLen, const char **errm
         return NULL;
     }
 
-    SBChain *sb = RedisModule_Calloc(1, sizeof(*sb));
-    sb->filters = RedisModule_Calloc(header->nfilters, sizeof(*sb->filters));
+    SBChain *sb = ValkeyModule_Calloc(1, sizeof(*sb));
+    sb->filters = ValkeyModule_Calloc(header->nfilters, sizeof(*sb->filters));
     sb->nfilters = header->nfilters;
     sb->options = header->options;
     sb->size = header->size;
@@ -223,7 +223,7 @@ SBChain *SB_NewChainFromHeader(const char *buf, size_t bufLen, const char **errm
 #define X(encfld, dstfld) dstfld = encfld;
         X_ENCODED_LINK(X, srclink, dstlink)
 #undef X
-        dstlink->inner.bf = RedisModule_Alloc(dstlink->inner.bytes);
+        dstlink->inner.bf = ValkeyModule_Alloc(dstlink->inner.bytes);
         if (sb->options & BLOOM_OPT_FORCE64) {
             dstlink->inner.force64 = 1;
         }

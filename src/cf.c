@@ -1,8 +1,8 @@
-#include "redismodule.h"
-#define CUCKOO_MALLOC RedisModule_Alloc
-#define CUCKOO_CALLOC RedisModule_Calloc
-#define CUCKOO_REALLOC RedisModule_Realloc
-#define CUCKOO_FREE RedisModule_Free
+#include "valkeymodule.h"
+#define CUCKOO_MALLOC ValkeyModule_Alloc
+#define CUCKOO_CALLOC ValkeyModule_Calloc
+#define CUCKOO_REALLOC ValkeyModule_Realloc
+#define CUCKOO_FREE ValkeyModule_Free
 #include "cuckoo.c"
 #include "cf.h"
 
@@ -51,13 +51,13 @@ const char *CF_GetEncodedChunk(const CuckooFilter *cf, long long *pos, size_t *b
 int CF_LoadEncodedChunk(const CuckooFilter *cf, long long pos, const char *data, size_t datalen) {
     if (datalen == 0 || datalen % CUCKOO_BKTSIZE != 0) {
         // printf("problem with datalen!\n");
-        return REDISMODULE_ERR;
+        return VALKEYMODULE_ERR;
     }
 
     size_t nbuckets = datalen / CUCKOO_BKTSIZE;
     if (nbuckets > pos) {
         // printf("nbuckets>pos. pos=%lu. nbuckets=%lu\n", nbuckets, pos);
-        return REDISMODULE_ERR;
+        return VALKEYMODULE_ERR;
     }
 
     pos -= nbuckets;
@@ -66,7 +66,7 @@ int CF_LoadEncodedChunk(const CuckooFilter *cf, long long pos, const char *data,
     uint8_t *bucketpos = getBucketPos(cf, pos, &offset);
     if (bucketpos == NULL) {
         // printf("bucketpos=NULL\n");
-        return REDISMODULE_ERR;
+        return VALKEYMODULE_ERR;
     }
 
     // printf("OFFSET: %lu\n", offset);
@@ -74,22 +74,22 @@ int CF_LoadEncodedChunk(const CuckooFilter *cf, long long pos, const char *data,
     if (offset + nbuckets > cf->numBuckets) {
         // printf("offset+nbuckets > cf->numBuckets. offset=%lu, nbuckets=%lu, numBuckets=%lu\n",
         //        offset, nbuckets, cf->numBuckets);
-        return REDISMODULE_ERR;
+        return VALKEYMODULE_ERR;
     }
 
     memcpy(bucketpos, data, datalen);
-    return REDISMODULE_OK;
+    return VALKEYMODULE_OK;
 }
 
 CuckooFilter *CFHeader_Load(const CFHeader *header) {
-    CuckooFilter *filter = RedisModule_Calloc(1, sizeof(*filter));
+    CuckooFilter *filter = ValkeyModule_Calloc(1, sizeof(*filter));
     filter->numBuckets = header->numBuckets;
     filter->numFilters = header->numFilters;
     filter->numItems = header->numItems;
     filter->numDeletes = header->numDeletes;
-    filter->filters = RedisModule_Alloc(sizeof(*filter->filters) * header->numFilters);
+    filter->filters = ValkeyModule_Alloc(sizeof(*filter->filters) * header->numFilters);
     for (size_t ii = 0; ii < filter->numFilters; ++ii) {
-        filter->filters[ii] = RedisModule_Calloc(filter->numBuckets, sizeof(CuckooBucket));
+        filter->filters[ii] = ValkeyModule_Calloc(filter->numBuckets, sizeof(CuckooBucket));
     }
     return filter;
 }

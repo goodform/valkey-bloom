@@ -1,4 +1,4 @@
-# ReBloom - Probablistic Datatypes Module for Redis
+# ValkeyBloom - Probablistic Datatypes Module for Valkey
 
 This module provides two datatypes, a Scalable Bloom Filter and a Cuckoo Filter.
 These datatypes are used to determine (with a given degree of certainty) whether
@@ -6,25 +6,19 @@ an item is present (or absent) from a collection.
 
 
 ## Quick Start Guide
-1. [Launch ReBloom with Docker](#launch-rebloom-with-docker)
-1. [Use Rebloom with redis-cli](#use-rebloom-with-redis-cli)
+[Use ValkeyBloom with valkey-cli](#use-valkeybloom-with-valkey-cli)
 
-Note: You can also [build and load the module](#building-and-loading-rebloom) yourself.
+Note: You can also [build and load the module](#building-and-loading-valkeybloom) yourself.
 
 You can find a command reference in [Bloom Commands.md](Bloom_Commands.md) and
 [Cuckoo Commands](Cuckoo_Commands.md)
 
 
-### Launch ReBloom with Docker
+### Use ValkeyBloom with `valkey-cli`
 ```
-docker run -p 6379:6379 --name redis-rebloom goodform/rebloom:latest
-```
+docker exec -it valkey-bloom bash
 
-### Use ReBloom with `redis-cli`
-```
-docker exec -it redis-rebloom bash
-
-# redis-cli
+# valkey-cli
 # 127.0.0.1:6379> 
 ```
 
@@ -41,16 +35,16 @@ Start a new bloom filter by adding a new item
 ```
 
 
-## Building and Loading ReBloom
+## Building and Loading ValkeyBloom
 
-In order to use this module, build it using `make` and load it into Redis.
+In order to use this module, build it using `make` and load it into Valkey.
 
 ### Loading
 
-**Invoking redis with the module loaded**
+**Invoking valkey with the module loaded**
 
 ```
-$ redis-server --loadmodule /path/to/rebloom.so
+$ valkey-server --loadmodule /path/to/valkeybloom.so
 ```
 
 You can find a command reference in [Bloom\_Commands.md](Bloom_Commands.md)
@@ -59,7 +53,7 @@ and [Cuckoo\_Commands.md](Cuckoo_Commands.md)
 
 ## Building
 
-In order to use this module, build it using `make` and load it into Redis.
+In order to use this module, build it using `make` and load it into Valkey.
 
 ### Module Options
 
@@ -68,7 +62,7 @@ using the `ERROR_RATE` and `INITIAL_SIZE` options respectively when loading the
 module, e.g.
 
 ```
-$ redis-server --loadmodule /path/to/rebloom.so INITIAL_SIZE 400 ERROR_RATE 0.004
+$ valkey-server --loadmodule /path/to/valkeybloom.so INITIAL_SIZE 400 ERROR_RATE 0.004
 ```
 
 The default error rate is `0.01` and the default initial capacity is `100`.

@@ -15,7 +15,7 @@ ifeq ($(uname_S),Linux)
 else
 	CFLAGS += -mmacosx-version-min=10.6
 	SHOBJ_CFLAGS ?= -dynamic -fno-common -g -ggdb
-	SHOBJ_LDFLAGS ?= -dylib -exported_symbol _RedisModule_OnLoad -macosx_version_min 10.6
+	SHOBJ_LDFLAGS ?= -dylib -exported_symbol _ValkeyModule_OnLoad -macosx_version_min 10.6
 endif
 
 ROOT=$(shell pwd)
@@ -24,8 +24,8 @@ LDFLAGS = -lm -lc
 
 CPPFLAGS += -I$(ROOT) -I$(ROOT)/contrib
 SRCDIR := $(ROOT)/src
-MODULE_OBJ = $(SRCDIR)/rebloom.o
-MODULE_SO = $(ROOT)/rebloom.so
+MODULE_OBJ = $(SRCDIR)/valkeybloom.o
+MODULE_SO = $(ROOT)/valkeybloom.so
 
 DEPS = $(ROOT)/contrib/MurmurHash2.o \
 	   $(SRCDIR)/sb.o \
@@ -51,10 +51,6 @@ perf:
 	$(MAKE) -C tests perf
 
 
-package: $(MODULE_SO)
-	mkdir -p $(ROOT)/build
-	ramp-packer -vvv -m ramp.yml -o "$(ROOT)/build/rebloom.{os}-{architecture}.latest.zip" "$(MODULE_SO)"
-
 clean:
 	$(RM) $(MODULE_OBJ) $(MODULE_SO) $(DEPS)
 	$(RM) -f print_version
@@ -64,10 +60,10 @@ clean:
 distclean: clean
 
 docker:
-	docker build -t goodform/rebloom .
+	docker build -t valkey/valkeybloom .
 
 docker_push: docker
-	docker push goodform/rebloom:latest
+	docker push valkey/valkeybloom:latest
 
 # Compile an executable that prints the current version
 print_version:  $(SRCDIR)/version.h $(SRCDIR)/print_version.c

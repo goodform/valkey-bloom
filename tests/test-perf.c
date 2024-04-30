@@ -1,4 +1,4 @@
-#include "redismodule.h"
+#include "valkeymodule.h"
 #include "sb.h"
 #include <stdio.h>
 
@@ -10,9 +10,9 @@ static void *calloc_wrap(size_t a, size_t b) { return calloc(a, b); }
 static void free_wrap(void *p) { free(p); }
 
 int main(int argc, char **argv) {
-    RedisModule_Calloc = calloc_wrap;
-    RedisModule_Free = free_wrap;
-    RedisModule_Realloc = realloc;
+    ValkeyModule_Calloc = calloc_wrap;
+    ValkeyModule_Free = free_wrap;
+    ValkeyModule_Realloc = realloc;
 
     SBChain *chain = SB_NewChain(NUM_ITEMS, ERROR_RATE, 0);
     for (size_t ii = 0; ii < NUM_ITERATIONS; ++ii) {

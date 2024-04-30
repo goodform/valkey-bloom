@@ -1,5 +1,5 @@
 
-# Quick Start Guide for ReBloom
+# Quick Start Guide for ValkeyBloom
 
 Bloom filters and cuckoo filters work fairly similarly at the API level; they
 both allow you to add items to a set (in effect making sure the item has been
@@ -8,12 +8,12 @@ both allow you to add items to a set (in effect making sure the item has been
 ## Building and running
 
 ```sh
-git clone https://github.com/goodform/rebloom.git
-cd rebloom
+git clone https://github.com/goodform/valkey-bloom.git
+cd ValkeyBloom
 make
 
-# Assuming you have a redis build from the unstable branch:
-/path/to/redis-server --loadmodule ./rebloom.so
+# Assuming you have a valkey build from the unstable branch:
+/path/to/valkey-server --loadmodule ./valkeybloom.so
 ```
 
 # Bloom Filters

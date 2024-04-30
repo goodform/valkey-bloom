@@ -1,7 +1,7 @@
 #include "cuckoo.h"
 #include "test.h"
 #include "murmurhash2.h"
-#include "redismodule.h"
+#include "valkeymodule.h"
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -166,10 +166,10 @@ TEST_F(cuckoo, testBulkDel) {
 
 int main(int argc, char **argv) {
     test__abort_on_fail = 1;
-    RedisModule_Calloc = calloc_wrap;
-    RedisModule_Free = free_wrap;
-    RedisModule_Realloc = realloc;
-    RedisModule_Alloc = malloc;
+    ValkeyModule_Calloc = calloc_wrap;
+    ValkeyModule_Free = free_wrap;
+    ValkeyModule_Realloc = realloc;
+    ValkeyModule_Alloc = malloc;
 
     TEST_RUN_ALL_TESTS();
     return 0;

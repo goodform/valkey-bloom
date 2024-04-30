@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from rmtest import ModuleTestCase
+from vkmtest import ModuleTestCase
 from redis import ResponseError
 import sys
 
@@ -7,7 +7,7 @@ if sys.version >= '3':
     xrange = range
 
 
-class CuckooTestCase(ModuleTestCase('../rebloom.so')):
+class CuckooTestCase(ModuleTestCase('../valkeybloom.so')):
     def test_count(self):
         c = self.client
         s = self.server
